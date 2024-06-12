@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "622000478450",
+    "project_id": "rsvp-4ee51",
+    "storage_bucket": "rsvp-4ee51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:622000478450:android:18ea4fe426f0ba6a0dd86b",
+        "android_client_info": {
+          "package_name": "com.example.rsvp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVS3QNqwi73K78twfECJygDS6DYsExiII"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

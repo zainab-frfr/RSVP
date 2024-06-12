@@ -4,7 +4,7 @@ import 'package:rsvp/pages/register.dart';
 
 class LoginOrRegister extends StatefulWidget {
 
-  LoginOrRegister({super.key});
+  const LoginOrRegister({super.key});
 
   @override
   State<LoginOrRegister> createState() => _LoginOrRegisterState();

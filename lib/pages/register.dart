@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rsvp/components/button.dart';
 import 'package:rsvp/components/textfield.dart';
+import 'package:rsvp/services/auth_services/auth_services.dart';
 
 class MyRegisterPage extends StatefulWidget {
 
@@ -13,11 +14,30 @@ class MyRegisterPage extends StatefulWidget {
 }
 
 class _MyRegisterPageState extends State<MyRegisterPage> {
+  final AuthServices _authService = AuthServices();
+
+  bool error = false;
+  
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passConfirmController = TextEditingController();
+
+  void register() async{
+    if (_passController.text == _passConfirmController.text){
+      try{
+        await _authService.register(_emailController.text, _passController.text, _usernameController.text);
+        error = false;
+      } catch (e){
+        error = true;
+      }
+
+    }else{
+      error = true;
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +79,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
           ),
           MyButton(
             text: 'Register',
-            onTap: () {},
+            onTap: register,
           ),
           const SizedBox(
             height: 40,

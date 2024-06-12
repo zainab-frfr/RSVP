@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rsvp/firebase_options.dart';
-import 'package:rsvp/services/auth_services/login_or_register.dart';
+import 'package:rsvp/services/auth_services/auth_gate.dart';
 import 'package:rsvp/themes/themeprovider.dart';
 import 'package:provider/provider.dart';
 
@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Provider.of<ThemeProvider>(context).loadTheme(),
-      initialRoute: '/toggle',
+      initialRoute: '/authGate',
       routes: {
-        '/toggle': (context) => LoginOrRegister(),
+        '/authGate': (context) => const MyAuthGate(),
       }
     );
   }

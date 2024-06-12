@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rsvp/components/button.dart';
 import 'package:rsvp/components/textfield.dart';
+import 'package:rsvp/services/auth_services/auth_services.dart';
 
 class MyLoginPage extends StatefulWidget {
 
@@ -13,8 +14,23 @@ class MyLoginPage extends StatefulWidget {
 }
 
 class _MyLoginPageState extends State<MyLoginPage> {
+
+  final AuthServices _authService = AuthServices();
+
+  bool error = false;
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+
+  void login() async{
+    try{
+      await _authService.login(_emailController.text, _passController.text);
+      error = false;
+    }catch (e){
+      error = true;
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +58,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
           ),
           MyButton(
             text: 'Login',
-            onTap: () {},
+            onTap: login,
           ),
           const SizedBox(
             height: 40,

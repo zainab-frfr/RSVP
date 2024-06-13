@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rsvp/firebase_options.dart';
+import 'package:rsvp/pages/events.dart';
+import 'package:rsvp/pages/settings.dart';
 import 'package:rsvp/services/auth_services/auth_gate.dart';
 import 'package:rsvp/themes/themeprovider.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/authGate',
       routes: {
         '/authGate': (context) => const MyAuthGate(),
+        '/settings': (context) => const MySettingsPage(),
+        '/events' : (context) => const MyEventsPage(),
       }
     );
   }

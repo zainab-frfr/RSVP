@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rsvp/components/drawer.dart';
 import 'package:rsvp/themes/themeprovider.dart';
 
 class MySettingsPage extends StatelessWidget {
@@ -14,6 +15,7 @@ class MySettingsPage extends StatelessWidget {
         title: const Text("Settings"),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.background,
+        elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Container(
@@ -34,7 +36,8 @@ class MySettingsPage extends StatelessWidget {
             )
           ],
         ),
-      )
+      ),
+      drawer: const MyDrawer(),
     );
   }
 }

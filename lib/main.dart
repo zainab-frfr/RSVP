@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/authGate': (context) => const MyAuthGate(),
         '/settings': (context) => const MySettingsPage(),
-        '/events' : (context) => const MyEventsPage(),
+        '/events' : (context) => MyEventsPage(),
       }
     );
   }

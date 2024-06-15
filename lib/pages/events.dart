@@ -102,6 +102,8 @@ class MyEventsPage extends StatelessWidget {
   }
 
   void addEvent(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode();
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -150,7 +152,16 @@ class MyEventsPage extends StatelessWidget {
                     )
                   ],
                 )),
-            actions: const [],
+            actions: [
+              TextButton(
+                onPressed: () {},
+                child: Text('Ok', style: TextStyle(color: isDarkMode? Colors.white : Colors.black),),
+              ),
+              TextButton(
+                onPressed: () {}, 
+                child: Text('Cancel', style: TextStyle(color: isDarkMode? Colors.white : Colors.black),)
+              ),
+            ],
           );
         });
   }

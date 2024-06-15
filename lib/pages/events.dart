@@ -1,12 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rsvp/components/button.dart';
 import 'package:rsvp/components/drawer.dart';
 import 'package:rsvp/components/textfield.dart';
+import 'package:rsvp/services/auth_services/auth_services.dart';
+import 'package:rsvp/services/events_services/event_services.dart';
 import 'package:rsvp/themes/themeprovider.dart';
 
 class MyEventsPage extends StatelessWidget {
   MyEventsPage({super.key});
+
+  final EventServices _eventService = EventServices();
+  final AuthServices _auth = AuthServices();
+  final FirebaseFirestore _store = FirebaseFirestore.instance;
 
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
@@ -100,7 +107,26 @@ class MyEventsPage extends StatelessWidget {
       _time.text = "${picked.hour}:${picked.minute}";
     }
   }
-
+  
+  void clearControllers(){
+    _title.clear();
+    _description.clear();
+    _venue.clear();
+    _date.clear();
+    _time.clear();
+  }
+  void okOnPressed()async{
+    String username = "";
+    DocumentSnapshot userDoc = await _store.collection("Users").doc(_auth.getUser()!.uid).get();
+    if(userDoc.exists){
+      Map<String,dynamic> userData = userDoc.data() as Map<String,dynamic>;
+      username = userData['username'];
+    }
+    if (username.isNotEmpty && _title.text.isNotEmpty && _description.text.isNotEmpty && _venue.text.isNotEmpty && _date.text.isNotEmpty && _time.text.isNotEmpty){
+      _eventService.addEvent(_title.text, _description.text, _date.text, _time.text, username, _venue.text);
+      print("Event added");
+    }
+  }
   void addEvent(BuildContext context) {
     bool isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode();
@@ -113,53 +139,62 @@ class MyEventsPage extends StatelessWidget {
             content: Container(
                 height: 400,
                 width: 300,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    MyTextField(
-                        hintText: 'title',
-                        obscureText: false,
-                        controller: _title),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    MyTextField(
-                        hintText: 'description',
-                        obscureText: false,
-                        controller: _description),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    MyTextField(
-                        hintText: 'venue',
-                        obscureText: false,
-                        controller: _venue),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MyButton(
-                            text: 'Date',
-                            onTap: () => _showDatePicker(context)),
-                        MyButton(
-                            text: 'Time',
-                            onTap: () => _showTimePicker(context)),
-                      ],
-                    )
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      MyTextField(
+                          hintText: 'title',
+                          obscureText: false,
+                          controller: _title),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      MyTextField(
+                          hintText: 'description',
+                          obscureText: false,
+                          controller: _description),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      MyTextField(
+                          hintText: 'venue',
+                          obscureText: false,
+                          controller: _venue),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MyButton(
+                              text: 'Date',
+                              onTap: () => _showDatePicker(context)),
+                          MyButton(
+                              text: 'Time',
+                              onTap: () => _showTimePicker(context)),
+                        ],
+                      )
+                    ],
+                  ),
                 )),
             actions: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  okOnPressed();
+                  clearControllers();
+                  Navigator.pop(context);
+                },
                 child: Text('Ok', style: TextStyle(color: isDarkMode? Colors.white : Colors.black),),
               ),
               TextButton(
-                onPressed: () {}, 
-                child: Text('Cancel', style: TextStyle(color: isDarkMode? Colors.white : Colors.black),)
+                onPressed: () {
+                  clearControllers();
+                  Navigator.pop(context);
+                }, 
+                child: Text('Cancel', style: TextStyle(color: isDarkMode? Colors.white : Colors.black),),
               ),
             ],
           );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rsvp/components/button.dart';
 import 'package:rsvp/components/drawer.dart';
+import 'package:rsvp/components/event_tile.dart';
 import 'package:rsvp/components/textfield.dart';
 import 'package:rsvp/services/auth_services/auth_services.dart';
 import 'package:rsvp/services/events_services/event_services.dart';
@@ -125,7 +126,16 @@ class MyEventsPage extends StatelessWidget {
     if (username.isNotEmpty && _title.text.isNotEmpty && _description.text.isNotEmpty && _venue.text.isNotEmpty && _date.text.isNotEmpty && _time.text.isNotEmpty){
       _eventService.addEvent(_title.text, _description.text, _date.text, _time.text, username, _venue.text);
       print("Event added");
+    }else{
+      print("Event not added");
+      // print(username.isNotEmpty);
+      // print(_title.text.isNotEmpty);
+      // print(_description.text.isNotEmpty);
+      // print(_venue.text.isNotEmpty);
+      // print(_date.text.isNotEmpty);
+      // print(_time.text.isNotEmpty);
     }
+    clearControllers();
   }
   void addEvent(BuildContext context) {
     bool isDarkMode =
@@ -184,7 +194,6 @@ class MyEventsPage extends StatelessWidget {
               TextButton(
                 onPressed: () {
                   okOnPressed();
-                  clearControllers();
                   Navigator.pop(context);
                 },
                 child: Text('Ok', style: TextStyle(color: isDarkMode? Colors.white : Colors.black),),
@@ -223,6 +232,36 @@ class MyEventsPage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      body: _eventsList(context),
     );
+  }
+
+  Widget _eventsList(BuildContext context){
+    return StreamBuilder(
+      stream: _eventService.getEventStream(), 
+      builder: (context, snapshot){
+        //errors
+          if (snapshot.hasError) {
+            return const Text('Error');
+          }
+
+          //loading
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('Loading...');
+          }
+
+          //eventsList
+          return ListView(
+            children: snapshot.data!
+                .map<Widget>(
+                    (eventData) => _buildEventsListItem(eventData, context))
+                .toList(),
+          );
+      }
+    );
+  }
+
+  Widget _buildEventsListItem(Map<String, dynamic> eventData, BuildContext context){
+    return MyEventTile(eventName: eventData['title'], onTap: (){},);
   }
 }

@@ -15,5 +15,13 @@ class EventServices{
     });
   }
 
-  
+  //get event stream
+  Stream<List<Map<String, dynamic>>> getEventStream() {
+    return _store.collection("Events").snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final event = doc.data();
+        return event;
+      }).toList();
+    });
+  }
 }

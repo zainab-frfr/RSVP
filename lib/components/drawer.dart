@@ -28,6 +28,16 @@ class MyDrawer extends StatelessWidget {
                 ),
               ),
               Padding(
+                padding:  const EdgeInsets.only(left: 25),
+                child: ListTile(
+                  title:const Text('My Events'),
+                  onTap: (){
+                    Navigator.pop(context);
+                    Navigator.popAndPushNamed(context, '/myEvents');
+                  },
+                ),
+              ),
+              Padding(
                 padding: const EdgeInsets.only(left: 25),
                 child: ListTile(
                   title: const Text('Settings'),

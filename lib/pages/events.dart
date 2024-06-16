@@ -5,6 +5,7 @@ import 'package:rsvp/components/button.dart';
 import 'package:rsvp/components/drawer.dart';
 import 'package:rsvp/components/event_tile.dart';
 import 'package:rsvp/components/textfield.dart';
+import 'package:rsvp/pages/event_details.dart';
 import 'package:rsvp/services/auth_services/auth_services.dart';
 import 'package:rsvp/services/events_services/event_services.dart';
 import 'package:rsvp/themes/themeprovider.dart';
@@ -262,6 +263,12 @@ class MyEventsPage extends StatelessWidget {
   }
 
   Widget _buildEventsListItem(Map<String, dynamic> eventData, BuildContext context){
-    return MyEventTile(eventName: eventData['title'], onTap: (){},);
+    return MyEventTile(
+      eventName: eventData['title'], 
+      onTap: (){
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => EventDetails(title: eventData['title'], description: eventData['description'], host: eventData['host'], time: eventData['time'], date: eventData['date'], venue: eventData['venue'],),));
+      },
+    );
   }
 }

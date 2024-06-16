@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rsvp/components/drawer.dart';
 import 'package:rsvp/components/event_tile.dart';
+import 'package:rsvp/pages/event_details.dart';
 import 'package:rsvp/services/auth_services/auth_services.dart';
 import 'package:rsvp/services/events_services/event_services.dart';
 
@@ -71,7 +72,12 @@ class PersonalEventsPage extends StatelessWidget {
       username = userData['username'];
     }
     if(eventData['host'] == username){
-      return MyEventTile(eventName: eventData['title'], onTap: (){},);
+      return MyEventTile(
+        eventName: eventData['title'], 
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => EventDetails(title: eventData['title'], description: eventData['description'], host: eventData['host'], time: eventData['time'], date: eventData['date'], venue: eventData['venue'],),));
+      },);
     }else{
       return Container();
     }

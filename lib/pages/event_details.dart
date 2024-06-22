@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rsvp/components/button.dart';
+import 'package:rsvp/pages/chat_page.dart';
 import 'package:rsvp/services/events_services/event_services.dart';
 
 class EventDetails extends StatefulWidget {
@@ -27,13 +28,18 @@ class EventDetails extends StatefulWidget {
 
 class _EventDetailsState extends State<EventDetails> {
   EventServices eventService = EventServices();
+  bool attend = false;
 
-  Future<bool> _isAttending() async {
-    return await eventService.isAttending(widget.title, widget.username);
+  void _isAttending() async {
+    bool isAttending= await eventService.isAttending(widget.title, widget.username);
+    setState(() {
+      attend = isAttending;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _isAttending();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -50,7 +56,7 @@ class _EventDetailsState extends State<EventDetails> {
                 elevation: 0.0,
                 backgroundColor: Theme.of(context).colorScheme.tertiary,
                 child: const Text('RSVP'),
-                onPressed: () {
+                onPressed: () async {
                   eventService.addAttendee(widget.title, widget.username);
                   setState(() {});
                 }),
@@ -70,24 +76,22 @@ class _EventDetailsState extends State<EventDetails> {
               tile(context, 'Time', widget.time),
             ],
           ),
-          FutureBuilder<bool>(
-            future: _isAttending(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Center(child: Text('Error checking RSVP status'));
-              } else if (snapshot.hasData && snapshot.data == true) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 25),
-                  child: MyButton(
-                    text: 'Event Chat',
-                    onTap: () {},
-                  ),
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            },
-          ),
+          if (attend)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 25),
+              child: MyButton(
+                text: 'Event Chat',
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyChatPage(
+                                EventTitle: widget.title,
+                                username: widget.username,
+                              )));
+                },
+              ),
+            )
         ],
       ),
     );
@@ -134,33 +138,3 @@ class _EventDetailsState extends State<EventDetails> {
         ));
   }
 }
-
-
-  // Container heading(BuildContext context, String text) {
-  //   return Container(
-  //     padding: const EdgeInsets.all(20),
-  //     margin: const EdgeInsets.only(left: 25, right: 25, top: 10, bottom: 10),
-  //     decoration: BoxDecoration(
-  //       color: Theme.of(context).colorScheme.tertiary,
-  //       borderRadius: BorderRadius.circular(12),
-  //     ),
-  //     child: Text(
-  //       text,
-  //       style: const TextStyle(
-  //           fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white),
-  //     ),
-  //   );
-  // }
-
-  // Container content(BuildContext context, String text) {
-  //   return Container(
-  //       padding: const EdgeInsets.all(20),
-  //       margin: const EdgeInsets.only(left: 25, right: 25, top: 10, bottom: 10),
-  //       decoration: BoxDecoration(
-  //         color: Theme.of(context).colorScheme.secondary,
-  //         borderRadius: BorderRadius.circular(12),
-  //       ),
-  //       child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.end,
-  //           children: [Text(text)]));
-  // }

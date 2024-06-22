@@ -74,9 +74,10 @@ class PersonalEventsPage extends StatelessWidget {
     if(eventData['host'] == username){
       return MyEventTile(
         eventName: eventData['title'], 
-        onTap: (){
+        onTap: () async{
+          String username =  await _auth.getUsername();
           Navigator.push(context, MaterialPageRoute(
-            builder: (context) => EventDetails(title: eventData['title'], description: eventData['description'], host: eventData['host'], time: eventData['time'], date: eventData['date'], venue: eventData['venue'],),));
+            builder: (context) => EventDetails(title: eventData['title'], description: eventData['description'], host: eventData['host'], time: eventData['time'], date: eventData['date'], venue: eventData['venue'], username: username,),));
       },);
     }else{
       return Container();

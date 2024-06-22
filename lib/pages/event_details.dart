@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:rsvp/components/button.dart';
+import 'package:rsvp/services/events_services/event_services.dart';
 
-class EventDetails extends StatelessWidget {
+class EventDetails extends StatefulWidget {
   final String title;
   final String description;
   final String host;
   final String time;
   final String date;
   final String venue;
+  final String username;
 
   const EventDetails(
       {super.key,
@@ -15,30 +18,77 @@ class EventDetails extends StatelessWidget {
       required this.host,
       required this.time,
       required this.date,
-      required this.venue});
+      required this.venue,
+      required this.username});
+
+  @override
+  State<EventDetails> createState() => _EventDetailsState();
+}
+
+class _EventDetailsState extends State<EventDetails> {
+  EventServices eventService = EventServices();
+
+  Future<bool> _isAttending() async {
+    return await eventService.isAttending(widget.title, widget.username);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
-        centerTitle: true,
+        title: Text(
+          widget.title,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: false,
         backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 25),
+            child: FloatingActionButton(
+                elevation: 0.0,
+                backgroundColor: Theme.of(context).colorScheme.tertiary,
+                child: const Text('RSVP'),
+                onPressed: () {
+                  eventService.addAttendee(widget.title, widget.username);
+                  setState(() {});
+                }),
+          )
+        ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-
-            tile(context, 'Description', description),
-            tile(context, 'Venue', venue),
-            tile(context, 'Organizer', host),
-            tile(context, 'Date', date),
-            tile(context, 'Time', time),
-
-          ],
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              tile(context, 'Description', widget.description),
+              tile(context, 'Venue', widget.venue),
+              tile(context, 'Organizer', widget.host),
+              tile(context, 'Date', widget.date),
+              tile(context, 'Time', widget.time),
+            ],
+          ),
+          FutureBuilder<bool>(
+            future: _isAttending(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(child: Text('Error checking RSVP status'));
+              } else if (snapshot.hasData && snapshot.data == true) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 25),
+                  child: MyButton(
+                    text: 'Event Chat',
+                    onTap: () {},
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -57,14 +107,29 @@ class EventDetails extends StatelessWidget {
             Text(
               heading,
               style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,),
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
             ),
-            Column(
-              children: [
-                Text(text)
-              ],
-            )
+            const SizedBox(
+              width: 20,
+            ),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 50),
+                    child: Text(
+                      text,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 3, // Adjust the maxLines as needed
+                      softWrap: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ));
   }

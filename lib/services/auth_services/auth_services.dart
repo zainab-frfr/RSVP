@@ -47,4 +47,13 @@ class AuthServices{
     return _auth.currentUser;
   }
 
+  Future<String> getUsername()async {
+    String username = "";
+    DocumentSnapshot userDoc = await _store.collection("Users").doc(_auth.currentUser!.uid).get();
+    if(userDoc.exists){
+      Map<String,dynamic> userData = userDoc.data() as Map<String,dynamic>;
+      username = userData['username'];
+    }
+    return username;
+  } 
 }

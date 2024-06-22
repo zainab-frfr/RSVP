@@ -15,7 +15,6 @@ class MyEventsPage extends StatelessWidget {
 
   final EventServices _eventService = EventServices();
   final AuthServices _auth = AuthServices();
-  final FirebaseFirestore _store = FirebaseFirestore.instance;
 
   final TextEditingController _title = TextEditingController();
   final TextEditingController _description = TextEditingController();
@@ -118,12 +117,7 @@ class MyEventsPage extends StatelessWidget {
     _time.clear();
   }
   void okOnPressed()async{
-    String username = "";
-    DocumentSnapshot userDoc = await _store.collection("Users").doc(_auth.getUser()!.uid).get();
-    if(userDoc.exists){
-      Map<String,dynamic> userData = userDoc.data() as Map<String,dynamic>;
-      username = userData['username'];
-    }
+    String username = await _auth.getUsername();
     if (username.isNotEmpty && _title.text.isNotEmpty && _description.text.isNotEmpty && _venue.text.isNotEmpty && _date.text.isNotEmpty && _time.text.isNotEmpty){
       _eventService.addEvent(_title.text, _description.text, _date.text, _time.text, username, _venue.text);
       print("Event added");
@@ -265,9 +259,11 @@ class MyEventsPage extends StatelessWidget {
   Widget _buildEventsListItem(Map<String, dynamic> eventData, BuildContext context){
     return MyEventTile(
       eventName: eventData['title'], 
-      onTap: (){
+      onTap: () async{
+          String username =  await _auth.getUsername();
+          // ignore: use_build_context_synchronously
           Navigator.push(context, MaterialPageRoute(
-            builder: (context) => EventDetails(title: eventData['title'], description: eventData['description'], host: eventData['host'], time: eventData['time'], date: eventData['date'], venue: eventData['venue'],),));
+            builder: (context) => EventDetails(title: eventData['title'], description: eventData['description'], host: eventData['host'], time: eventData['time'], date: eventData['date'], venue: eventData['venue'], username: username,),));
       },
     );
   }

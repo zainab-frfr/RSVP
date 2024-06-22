@@ -41,9 +41,9 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCdSYYRHhRBO0wwTEyvCZUZYOC7-740iQA',
-    appId: '1:622000478450:web:8826bb4830cc20c40dd86b',
-    messagingSenderId: '622000478450',
+    apiKey: 'placeholder',
+    appId: 'placeholder',
+    messagingSenderId: 'placeholder',
     projectId: 'rsvp-4ee51',
     authDomain: 'rsvp-4ee51.firebaseapp.com',
     storageBucket: 'rsvp-4ee51.appspot.com',
@@ -51,35 +51,35 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBVS3QNqwi73K78twfECJygDS6DYsExiII',
-    appId: '1:622000478450:android:18ea4fe426f0ba6a0dd86b',
-    messagingSenderId: '622000478450',
+    apiKey: 'placeholder',
+    appId: 'placeholder',
+    messagingSenderId: 'placeholder',
     projectId: 'rsvp-4ee51',
     storageBucket: 'rsvp-4ee51.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAT2iDOCgl320MZrLsAd5nyiat6dX28168',
-    appId: '1:622000478450:ios:abb1da418a3e16020dd86b',
-    messagingSenderId: '622000478450',
+    apiKey: 'placeholder',
+    appId: 'placeholder',
+    messagingSenderId: 'placeholder',
     projectId: 'rsvp-4ee51',
     storageBucket: 'rsvp-4ee51.appspot.com',
     iosBundleId: 'com.example.rsvp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAT2iDOCgl320MZrLsAd5nyiat6dX28168',
-    appId: '1:622000478450:ios:abb1da418a3e16020dd86b',
-    messagingSenderId: '622000478450',
+    apiKey: 'placeholder',
+    appId: 'placeholder',
+    messagingSenderId: 'placeholder',
     projectId: 'rsvp-4ee51',
     storageBucket: 'rsvp-4ee51.appspot.com',
     iosBundleId: 'com.example.rsvp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCdSYYRHhRBO0wwTEyvCZUZYOC7-740iQA',
-    appId: '1:622000478450:web:dbc8b2d211d6803c0dd86b',
-    messagingSenderId: '622000478450',
+    apiKey: 'placeholder',
+    appId: 'placeholder',
+    messagingSenderId: 'placeholder',
     projectId: 'rsvp-4ee51',
     authDomain: 'rsvp-4ee51.firebaseapp.com',
     storageBucket: 'rsvp-4ee51.appspot.com',
